@@ -26,6 +26,7 @@ def auth_register():
     except IntegrityError as err:
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
             
+            # Differentiate between which of two values (email or username) need to be unique
             constraint_name = err.orig.diag.constraint_name
 
             if 'email' in str(constraint_name):
@@ -34,3 +35,25 @@ def auth_register():
                 return {'error': 'Username already taken'}, 409
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {'error': f'The {err.orig.diag.column_name} field is required'}, 409
+
+
+@auth_bp.route('/login', methods=['POST'])
+def auth_login():
+    body_data = request.get_json()
+    email_or_username = body_data.get('email_or_username')
+
+    stmt = db.select(User).where(db.or_(User.email == email_or_username, User.username == email_or_username))
+    user = db.session.scalar(stmt)
+
+    if user and bcrypt.check_password_hash(user.password, body_data.get('password')):
+        
+        token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1))
+        return {
+                'username': user.username, 
+                'email': user.email, 
+                'token': token, 
+                'is_admin': user.is_admin,
+                'message': 'Login successful'}, 200
+    
+    else:
+        return {'error': 'Incorrect login details'}, 401
