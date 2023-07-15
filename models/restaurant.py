@@ -19,6 +19,7 @@ class RestaurantSchema(ma.Schema):
     
     class Meta:
         fields = ('id', 'name', 'location', 'contact_number', 'website', 'category')
+        ordered = True
 
 restaurant_schema = RestaurantSchema()
 restaurants_schema = RestaurantSchema(many=True)
