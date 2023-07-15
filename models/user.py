@@ -6,7 +6,7 @@ class User(db.Model):
     __tablename__ = 'users'
 
     # Define data types
-    id = db.Column(db.Integer, primary=True)
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
@@ -14,10 +14,11 @@ class User(db.Model):
 
 
 '''
-Create UserSchema class as a 
+Create UserSchema class as a schema
 '''
 class UserSchema(ma.Schema):
-    fields = ('id', 'username', 'password', 'email', 'is_admin')
+    class Meta:
+        fields = ('id', 'username', 'password', 'email', 'is_admin')
 
 '''
 Initialize schemas for retrieving one or multiple user entries

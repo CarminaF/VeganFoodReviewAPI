@@ -15,4 +15,4 @@ you can just import them to main using its variable names
 db = SQLAlchemy()
 ma = Marshmallow()
 bcrypt = Bcrypt()
-jwt = JWTManager
+jwt = JWTManager()
