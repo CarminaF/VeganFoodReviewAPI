@@ -10,15 +10,15 @@ class Restaurant(db.Model):
     contact_number = db.Column(db.String)
     website = db.Column(db.String)
 
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    type_id = db.Column(db.Integer, db.ForeignKey('types.id'), nullable=False)
 
-    category = db.relationship('Category', back_populates='restaurants')
+    type = db.relationship('Type', back_populates='restaurants')
 
 class RestaurantSchema(ma.Schema):
-    category = fields.Nested('CategorySchema', only=['id', 'category'])
+    type = fields.Nested('TypeSchema', only=['id', 'type'])
     
     class Meta:
-        fields = ('id', 'name', 'location', 'contact_number', 'website', 'category')
+        fields = ('id', 'name', 'location', 'contact_number', 'website', 'type')
         ordered = True
 
 restaurant_schema = RestaurantSchema()
