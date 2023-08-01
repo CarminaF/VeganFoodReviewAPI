@@ -52,6 +52,8 @@ def delete_review(food_id, review_id):
         db.session.delete(review)
         db.session.commit()
         return {'msg': f'Review with title {review.review_title} has been deleted successfully'}
+    elif review and int(review.user_id) != int(user_id):
+        return {'error': f'Unauthorized to delete review with id {review_id}'}, 401
     else:
-        return {'error': f'Could not find review with id {review_id}'}
+        return {'error': f'Could not find review with id {review_id} to delete'}, 404
 
