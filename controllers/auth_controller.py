@@ -36,7 +36,9 @@ def auth_register():
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {'error': f'The {err.orig.diag.column_name} field is required'}, 409
 
-
+'''
+Users can log in using either with the email or username and password
+'''
 @auth_bp.route('/login', methods=['POST'])
 def auth_login():
     body_data = request.get_json()
