@@ -17,7 +17,7 @@ class Food(db.Model):
    
 
 class FoodSchema(ma.Schema):
-    restaurant = fields.Nested('RestaurantSchema', exclude=['foods'])
+    restaurant = fields.Nested('RestaurantSchema', only=['id', 'name', 'type'])
     reviews = fields.List(fields.Nested('ReviewSchema'), exclude=['food'])
 
     class Meta:

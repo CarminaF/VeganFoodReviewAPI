@@ -14,6 +14,7 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
 
     # When getting user details, the below allows one to see the reviews made by a user
+    # 'delete-orphan' allows user's reviews to still be seen
     reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')
 
 

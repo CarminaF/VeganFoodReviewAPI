@@ -3,7 +3,7 @@ from init import db, ma
 from models.food import Food, food_schema, foods_schema
 from models.review import Review, review_schema, reviews_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
-import datetime
+from datetime  import date
 
 
 reviews_bp = Blueprint('reviews', __name__)
@@ -29,7 +29,7 @@ def create_review(food_id):
             rating=body_data.get('rating'),
             review_title=body_data.get('review_title'),
             review_text=body_data.get('review_text'),
-            timestamp=datetime.datetime.now(),
+            timestamp=date.today(),
             user_id=get_jwt_identity(),
             food=food
         )

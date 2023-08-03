@@ -4,7 +4,7 @@ from models.user import User
 from models.restaurant import Restaurant
 from models.food import Food
 from models.review import Review
-import datetime
+from datetime import date
 
 
 db_commands = Blueprint('db', __name__)
@@ -138,7 +138,7 @@ def seed_db():
             rating=3,
             review_title='Could be better',
             review_text='Veggie patty is kind of bland',
-            timestamp=datetime.datetime.now(),
+            timestamp=date.today(),
             food=foods[0],
             user=users[1]
         ),
@@ -146,7 +146,7 @@ def seed_db():
             rating=2,
             review_title='Not the best',
             review_text='Patty is like mashed potato',
-            timestamp=datetime.datetime.now(),
+            timestamp=date.today(),
             food=foods[0],
             user=users[2]
         ),
@@ -154,7 +154,7 @@ def seed_db():
             rating=5,
             review_title='Best vegan yiros ever',
             review_text='Soy lamb tastes just like meat',
-            timestamp=datetime.datetime.now(),
+            timestamp=date.today(),
             food=foods[3],
             user=users[2]
         ),
@@ -162,7 +162,7 @@ def seed_db():
             rating=5,
             review_title='Did not disappoint',
             review_text='The mock lamb was amazing and juicy. Quick service too!',
-            timestamp=datetime.datetime.now(),
+            timestamp=date.today(),
             food=foods[3],
             user=users[3]
         ),
