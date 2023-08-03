@@ -89,13 +89,13 @@ def seed_db():
 
     foods = [
         Food (
-            name='Vegan Whopper Cheese',
+            name='Vegan Whopper Cheeseburger',
             description='Vegan burger. Vegan patty is made from mashed vegetables. Has vegan mayo and cheese',
             price=6.75,
             restaurant=restaurants[0],
         ),
         Food (
-            name='Plant Based Whopper',
+            name='Plant Based Whopper Burger',
             description='Vegan burger with meat-like plant based patty. Need to specify vegan cheese and vegan mayo',
             price=8.95,
             restaurant=restaurants[0]
@@ -114,7 +114,7 @@ def seed_db():
         ),
         Food (
             name='Vegan Lamb AB/HSP',
-            description='PB “lamb” layered over hot chips then topped with home made tzatziki & another sauce of your choice (tomato, bbq or sriracha).',
+            description='AB “lamb” layered over hot chips then topped with home made tzatziki & another sauce of your choice (tomato, bbq or sriracha).',
             price=18,
             restaurant=restaurants[1],
         ),

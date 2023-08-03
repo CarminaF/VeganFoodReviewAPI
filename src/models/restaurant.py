@@ -1,5 +1,5 @@
 from init import db, ma 
-from marshmallow import fields
+from marshmallow import fields, ValidationError, validates
 
 VALID_TYPES = ('Vegan', 'Vegetarian', 'Vegan options available')
 
@@ -29,6 +29,10 @@ class Restaurant(db.Model):
 class RestaurantSchema(ma.Schema):
     foods = fields.List(fields.Nested('FoodSchema', exclude=['restaurant', 'reviews']))
     
+    @validates('type')
+    def validate_type(self, value):
+        if value.lower not in (t.lower() for t in VALID_TYPES):
+            raise ValidationError(f'Invalid restaurant type')
     class Meta:
         fields = ('id', 'name', 'location', 'contact_number', 'website', 'type', 'foods')
         ordered = True

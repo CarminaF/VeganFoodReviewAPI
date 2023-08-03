@@ -5,6 +5,8 @@ from controllers.cli_controller import db_commands
 from controllers.auth_controller import auth_bp
 from controllers.restaurant_controller import restaurants_bp
 from controllers.food_controller import foods_bp
+from controllers.search_controller import search_bp
+
 
 def create_app():
     app = Flask(__name__)
@@ -23,5 +25,5 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(restaurants_bp)
     app.register_blueprint(foods_bp)
-    
+    app.register_blueprint(search_bp)
     return app

@@ -9,6 +9,19 @@ import functools
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+def admin_required(fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        user_id = get_jwt_identity()
+        stmt = db.select(User).filter_by(id=user_id)
+        user = db.session.scalar(stmt)
+        if user.is_admin:
+            return fn(*args, ** kwargs)
+        else:
+            return {'error': 'Only admins are authorized to delete and edit'}
+    return wrapper
+
+
 @auth_bp.route('/register', methods=['POST'])
 def auth_register():
     try:        
@@ -56,20 +69,8 @@ def auth_login():
                 'email': user.email, 
                 'token': token, 
                 'is_admin': user.is_admin,
-                'message': 'Login successful'}, 200
+                'message': 'Login successful'}
     
     else:
         return {'error': 'Incorrect login details'}, 401
     
-
-def admin_required(fn):
-    @functools.wraps(fn)
-    def wrapper(*args, **kwargs):
-        user_id = get_jwt_identity()
-        stmt = db.select(User).filter_by(id=user_id)
-        user = db.session.scalar(stmt)
-        if user.is_admin:
-            return fn(*args, ** kwargs)
-        else:
-            return {'error': 'Unauthorized to delete'}
-    return wrapper

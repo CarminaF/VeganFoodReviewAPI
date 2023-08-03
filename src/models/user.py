@@ -22,7 +22,7 @@ class User(db.Model):
 Create UserSchema class as a schema
 '''
 class UserSchema(ma.Schema):
-    reviews = fields.List(fields.Nested('ReviewSchema'), exclude=['user'])
+    reviews = fields.List(fields.Nested('ReviewSchema', exclude=['user']))
     class Meta:
         fields = ('id', 'username', 'password', 'email', 'is_admin', 'reviews')
 

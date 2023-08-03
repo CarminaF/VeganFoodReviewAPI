@@ -28,7 +28,7 @@ def create_food(restaurant_id):
         db.session.commit()
         return food_schema.dump(food), 201
     else:
-        return {'error': f'Restaurant with id {restaurant_id} not found'}
+        return {'error': f'Restaurant with id {restaurant_id} not found'}, 404
     
 
 @foods_bp.route('/<int:food_id>', methods=['DELETE'])
@@ -43,3 +43,33 @@ def delete_food(food_id):
         return {'msg': f'Food {food.name} deleted successfully'}
     else:
         return {'error': f'Food with id {food_id} not found'}, 404
+    
+@foods_bp.route('/')
+@jwt_required()
+def get_all_foods():
+    stmt = db.select(Food).order_by(Food.name.asc())
+    foods = db.session.scalars(stmt)
+    return foods_schema.dumps(foods)
+
+@foods_bp.route('/<int:food_id>')
+@jwt_required()
+def get_one_food(food_id):
+    stmt = db.select(Food).filter_by(id=food_id)
+    food = db.session.scalar(stmt)
+    return food_schema.dumps(food)
+
+@foods_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
+@jwt_required()
+@admin_required
+def update_food(id):
+    body_data = food_schema.load(request.get_json(), partial=True)
+    stmt = db.select(Food).filter_by(id=id)
+    food = db.session.scalar(stmt)
+    if food:
+        food.name = body_data.get('name') or food.name
+        food.description = body_data.get('description') or food.description
+        food.price = body_data.get('price') or food.price
+        db.session.commit()
+        return food_schema.dump(food)
+    else:
+        return {'error': f'Food with id {id} not found'}, 404

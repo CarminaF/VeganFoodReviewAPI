@@ -27,7 +27,7 @@ class Review(db.Model):
 
 class ReviewSchema(ma.Schema):
     food = fields.Nested('FoodSchema', exclude=['reviews'])
-    user = fields.Nested('UserSchema', exclude=['reviews', 'password'])
+    user = fields.Nested('UserSchema', only=['username'])
 
     class Meta:
         fields = ('id', 'rating', 'review_title', 'review_text', 'timestamp', 'food', 'user')

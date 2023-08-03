@@ -57,3 +57,25 @@ def delete_review(food_id, review_id):
     else:
         return {'error': f'Could not find review with id {review_id} to delete'}, 404
 
+
+@reviews_bp.route('/<int:review_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_review(food_id, review_id):
+    user_id = get_jwt_identity()
+    body_data = review_schema.load(request.get_json(), partial=True)
+    stmt = db.select(Review).filter_by(id=review_id)
+    review = db.session.scalar(stmt)
+    if int(review.user_id) != int(user_id):
+        return {'error': 'Only review writer authorized to update'}
+    if review:
+        review.rating = body_data.get('rating') or review.rating
+        review.review_title = body_data.get('review_title') or review.review_title
+        review.review_text = body_data.get('review_text') or review.review_text
+        review.timestamp = date.today()
+        db.session.commit()
+        return review_schema.dump(review)
+    else:
+        return {'error': f'Card with id {id} not found'}, 404
+    
+
+
