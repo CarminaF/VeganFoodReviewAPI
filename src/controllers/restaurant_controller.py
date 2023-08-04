@@ -4,6 +4,7 @@ from models.restaurant import Restaurant, restaurant_schema, restaurants_schema,
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from controllers.food_controller import foods_bp, admin_required
 
+# Create blueprint with prefix "/restaurants"
 restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
 
@@ -27,6 +28,7 @@ def get_one_restaurant(id):
 
 @restaurants_bp.route('/', methods=['POST'])
 @jwt_required()
+@admin_required
 def create_restaurant():
     body_data = request.get_json()
     if body_data.get('type') not in VALID_TYPES:

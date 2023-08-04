@@ -5,11 +5,12 @@ from models.review import Review, review_schema, reviews_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime  import date
 
-
+# Create blueprint. Registered in food.py
+# Prefix for all routes is /foods/<int:food_id>/reviews
 reviews_bp = Blueprint('reviews', __name__)
 
-#/foods/food_id/reviews
-
+# Get all reviews under a certain food
+#/foods/<int:food_id>/reviews
 @reviews_bp.route('/')
 @jwt_required()
 def get_reviews(food_id):
@@ -18,6 +19,8 @@ def get_reviews(food_id):
     return reviews_schema.dump(reviews)
 
 
+# Create a review for a food
+# /foods/<int:food_id>/reviews
 @reviews_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_review(food_id):
@@ -40,8 +43,8 @@ def create_review(food_id):
         return {'error': f'Food with id {food_id} not found'}, 404
 
 
-# foods/food_id/reviews/review_id
 # Users only have permission to delete their own reviews
+# foods/<int:food_id>/reviews/<int:review_id>
 @reviews_bp.route('/<int:review_id>', methods=['DELETE'])
 @jwt_required()
 def delete_review(food_id, review_id):
@@ -57,7 +60,8 @@ def delete_review(food_id, review_id):
     else:
         return {'error': f'Could not find review with id {review_id} to delete'}, 404
 
-
+# Users edit their own review
+# foods/<int:food_id>/reviews/<int:review_id>
 @reviews_bp.route('/<int:review_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_review(food_id, review_id):

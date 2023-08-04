@@ -1,8 +1,7 @@
 from init import db, ma
 from marshmallow import fields
-'''
-Create User class as a model using extension of db.Model
-'''
+
+# Create User class as a model using extension of db.Model
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -18,17 +17,13 @@ class User(db.Model):
     reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')
 
 
-'''
-Create UserSchema class as a schema
-'''
+# Create UserSchema class as a schema
 class UserSchema(ma.Schema):
     reviews = fields.List(fields.Nested('ReviewSchema', exclude=['user']))
     class Meta:
         fields = ('id', 'username', 'password', 'email', 'is_admin', 'reviews')
 
 
-'''
-Initialize schemas for retrieving one or multiple user entries
-'''
+# Initialize schemas for retrieving one or multiple user entries
 user_schema = UserSchema(exclude=['password'])
 users_schema = UserSchema(many=True, exclude=['password'])

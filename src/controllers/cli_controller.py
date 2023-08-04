@@ -6,8 +6,9 @@ from models.food import Food
 from models.review import Review
 from datetime import date
 
-
+# Create blueprint for CLI commands
 db_commands = Blueprint('db', __name__)
+
 
 @db_commands.cli.command('create')
 def create_db():
@@ -20,7 +21,7 @@ def drop_all():
     db.drop_all()
     print('Tables dropped')
 
-
+# Seed users, restaurants, food and reviews
 @db_commands.cli.command('seed')
 def seed_db():
     users = [

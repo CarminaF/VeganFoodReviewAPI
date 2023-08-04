@@ -3,14 +3,17 @@ from init import db, ma
 from models.food import Food, food_schema, foods_schema
 from models.restaurant import Restaurant, restaurant_schema, restaurants_schema
 from models.user import User
+from models.review import Review
 from controllers.review_controller import reviews_bp
 from controllers.auth_controller import admin_required
 from flask_jwt_extended import jwt_required
 
+# Create blueprint with prefix "/foods"
 foods_bp = Blueprint('foods', __name__, url_prefix='/foods')
+# Register review blueprint here as reviews belongs to one food
 foods_bp.register_blueprint(reviews_bp, url_prefix='/<int:food_id>/reviews')
 
-
+# Create new food under one existing restaurant
 @foods_bp.route('/<int:restaurant_id>', methods=['POST'])
 @jwt_required()
 def create_food(restaurant_id):
@@ -44,6 +47,7 @@ def delete_food(food_id):
     else:
         return {'error': f'Food with id {food_id} not found'}, 404
     
+
 @foods_bp.route('/')
 @jwt_required()
 def get_all_foods():
@@ -51,12 +55,14 @@ def get_all_foods():
     foods = db.session.scalars(stmt)
     return foods_schema.dumps(foods)
 
+
 @foods_bp.route('/<int:food_id>')
 @jwt_required()
 def get_one_food(food_id):
     stmt = db.select(Food).filter_by(id=food_id)
     food = db.session.scalar(stmt)
     return food_schema.dumps(food)
+
 
 @foods_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()

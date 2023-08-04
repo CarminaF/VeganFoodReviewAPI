@@ -3,7 +3,7 @@ from marshmallow import fields, ValidationError, validates
 
 VALID_TYPES = ('Vegan', 'Vegetarian', 'Vegan options available')
 
-
+# Initialise Restaurant tables and column
 class Restaurant(db.Model):
     __tablename__ = 'restaurants'
 
@@ -13,19 +13,17 @@ class Restaurant(db.Model):
     contact_number = db.Column(db.String)
     website = db.Column(db.String)
     
-    '''
-    The 'type' determines whether an establishment
-    is fully vegan, fully vegetarian or 
-    an omni restaurant with vegan options
-    '''
+    
+    # The 'type' determines whether an establishment
+    # is fully vegan, fully vegetarian or 
+    # an omni restaurant with vegan options
+    
     type = db.Column(db.String, nullable=False)
 
-    '''
-    Delete all food associated to a restaurant if restaurant is deleted
-    '''
+    # Delete all food associated to a restaurant if restaurant is deleted    
     foods = db.relationship('Food', back_populates='restaurant', cascade='all, delete') 
 
-    
+# Initialise Restaurant schema, nest list of foods
 class RestaurantSchema(ma.Schema):
     foods = fields.List(fields.Nested('FoodSchema', exclude=['restaurant', 'reviews']))
     
@@ -37,6 +35,6 @@ class RestaurantSchema(ma.Schema):
         fields = ('id', 'name', 'location', 'contact_number', 'website', 'type', 'foods')
         ordered = True
 
-
+# Initialize schemas for retrieving one or multiple user entries
 restaurant_schema = RestaurantSchema()
 restaurants_schema = RestaurantSchema(many=True)

@@ -4,8 +4,10 @@ from models.food import Food, food_schema, foods_schema
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
 
+# Create blueprint
 search_bp  = Blueprint('search', __name__, url_prefix='/search')
 
+# Search a keyword in the food name and description eg) 'burger'
 @search_bp.route('/food/<string:keyword>')
 @jwt_required()
 def search_food(keyword):
@@ -16,6 +18,8 @@ def search_food(keyword):
     else:
         return {'error': f'Could not find foods with keyword {keyword}'}, 404
 
+
+# Search a location in the location field
 @search_bp.route('/location/<string:keyword>')
 @jwt_required()
 def search_location(keyword):
@@ -26,6 +30,8 @@ def search_location(keyword):
     else:
         return {'error': f'Could not find restaurants in {keyword}'}, 404
 
+
+# Search for food items with a max price
 @search_bp.route('/price/max/<int:price>')
 @jwt_required()
 def search_max_price(price):
@@ -36,7 +42,8 @@ def search_max_price(price):
     else:
         return {'error': f'Could not find foods under ${price}'}, 404
 
-# 0 - Vegan, 1 - Vegetarian, 2 - Vegan options available
+# Serach for certain types of restaurants
+#  0 - Vegan, 1 - Vegetarian, 2 - Vegan options available
 @search_bp.route('/type/<int:type>')
 @jwt_required()
 def search_by_type(type):
