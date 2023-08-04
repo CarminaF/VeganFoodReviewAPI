@@ -43,49 +43,49 @@ An ORM or Object Relational Mapping is the simplified connection between object-
 
 #### User
 
-| HTTP Request  | Route          | Description  | Expected Result  |   |
-|---|---|---|---|---|
+| HTTP Request  | Route          | Description  | Expected Result  |
+|---|---|---|---|
 | POST| /auth/register   | Register as a new user | Dump login details except password on success, error messages if username and email taken or no input on non-nullable field  |
 | POST| /auth/login   | Log in    | Dump user token, login successful message and login except password. On error, 'incorrect login details' message.
-|   |   |   |   |   |
+|   |   |   |   |
 
 ####  Food
-| HTTP Request | Route                  | Description  | Expected Result  |   |
-|---|---|---|---|---|
-| POST  | /foods/\<int:restaurant_id\>  | Create food under one restaurant  | Dump new restaurant details on success, 404 error when id number not found  |   |
-| DELETE  | /foods/\<int:food_id\>  | Delete food (ADMIN ONLY)  | Deleted successfully message on success, 404 error when id not found and unauthorized if not an admin  |   |
-|GET   | /foods  | Get all foods  | Dumps all foods in database including reviews |   |
-|GET   | /foods/\<int:id\>  | Get one food  | Dumps detail of a single food including its reviews  |   |
-|PUT/PATCH   |  /foods/\<int:id\>  | Update food (ADMIN ONLY)  | Dumps updated food deatils on success, 404 error when id not found  |   |
-|   |   |   |   |   |
+| HTTP Request | Route                  | Description  | Expected Result  |
+|---|---|---|---|
+| POST  | /foods/\<int:restaurant_id\>  | Create food under one restaurant  | Dump new restaurant details on success, 404 error when id number not found  |
+| DELETE  | /foods/\<int:food_id\>  | Delete food (ADMIN ONLY)  | Deleted successfully message on success, 404 error when id not found and unauthorized if not an admin  |
+|GET   | /foods  | Get all foods  | Dumps all foods in database including reviews |
+|GET   | /foods/\<int:id\>  | Get one food  | Dumps detail of a single food including its reviews  |
+|PUT/PATCH   |  /foods/\<int:id\>  | Update food (ADMIN ONLY)  | Dumps updated food deatils on success, 404 error when id not found  |
+|   |   |   |   |
 
 #### Restaurant
-| HTTP Request | Route                  | Description  | Expected Result  |   |
-|---|---|---|---|---|
-| GET  |/restaurants   | Get all restaurants  | Dumps all existing resaturants  |   |
-|  GET |/restaurants/\<int:id\>   | Get on restaurant    |Dumps all details of one restaurant, 404 error if id not found   |   |
-| POST  |/restaurants   | Create restaurant (ADMIN ONLY)   | Dumps details of new restaurant  |   |
-| DELETE  |/foods/\<int:id\>  | Delete one restaurant (ADMIN ONLY)  | Deleted successfully message, 404 error when id not found  |   |
-| PUT, PATCH  | /restaurants/\<int:restaurant_id\>  | Update restaurant details (ADMIN ONLY)  |   |   |
-|   |   |   |   |   |
+| HTTP Request | Route                  | Description  | Expected Result  |
+|---|---|---|---|
+| GET  |/restaurants   | Get all restaurants  | Dumps all existing resataurants  |
+|  GET |/restaurants/\<int:id\>   | Get on restaurant    |Dumps all details of one restaurant, 404 error if id not found   |
+| POST  |/restaurants   | Create restaurant (ADMIN ONLY)   | Dumps details of new restaurant  |
+| DELETE  |/foods/\<int:id\>  | Delete one restaurant (ADMIN ONLY)  | Deleted successfully message, 404 error when id not found  |
+| PUT, PATCH  | /restaurants/\<int:restaurant_id\>  | Update restaurant details (ADMIN ONLY)  |   |
+|   |   |   |   |
 
 #### Review
-| HTTP Request | Route                  | Description  | Expected Result  |   |
-|---|---|---|---|---|
-| GET  | /foods/\<int:food_id\>/reviews  | Get all reviews under a certain food  | Dumps all reviews under a food on success, 404 error when food_id not found  |   |
-| POST  | /foods/\<int:food_id\>/reviews  | Create review  | Dumps created review on success, 404 error when food id not found  |   |
-|DELETE   | /foods/\<int:food_id\>/reviews/\<int:review_id\>  | Delete user's own review   | Message that review successfully deleted, 401  if review is not user's own, 404 if review id not found  |   |
-|PUT, PATCH   | /foods/\<int:food_id\>/reviews/\<int:review_id\>   | Edit user’s own review  | Dumps updated review, 404 when review id not found  |   |
-|   |   |   |   |   |
+| HTTP Request | Route                  | Description  | Expected Result  |
+|---|---|---|---|
+| GET  | /foods/\<int:food_id\>/reviews  | Get all reviews under a certain food  | Dumps all reviews under a food on success, 404 error when food_id not found  |
+| POST  | /foods/\<int:food_id\>/reviews  | Create review  | Dumps created review on success, 404 error when food id not found  |
+|DELETE   | /foods/\<int:food_id\>/reviews/\<int:review_id\>  | Delete user's own review   | Message that review successfully deleted, 401  if review is not user's own, 404 if review id not found  |
+|PUT, PATCH   | /foods/\<int:food_id\>/reviews/\<int:review_id\>   | Edit user’s own review  | Dumps updated review, 404 when review id not found  |
+|   |   |   |   |
 
 #### Search
-| HTTP Request | Route                  | Description  | Expected Result  |   |
-|---|---|---|---|---|
-| GET  |/search/food/\<string:keyword\>   |Search a keyword in the food name and description   | Dumps list of food containing keyword in the name and description  |   |
-| GET  |/search/location/\<string:keyword\>    |Search a location in the location field   |Dumps list of restaurants containing keyword in location field   |   |
-| GET   | /search/price/max/\<int:price\>  | Search for food items with a max price  | Returns list of foods equal to or under price  |   |
-| GET  |/search/type/\<int:type\>   | Search for certain types of restaurants: 0 - vegan, 1 - vegetarian, 2 - vegan options  | Returns list of restaurant according to type   |   |
-|   |   |   |   |   |
+| HTTP Request | Route                  | Description  | Expected Result  |
+|---|---|---|---|
+| GET  |/search/food/\<string:keyword\>   |Search a keyword in the food name and description   | Dumps list of food containing keyword in the name and description  |
+| GET  |/search/location/\<string:keyword\>    |Search a location in the location field   |Dumps list of restaurants containing keyword in location field   |
+| GET   | /search/price/max/\<int:price\>  | Search for food items with a max price  | Returns list of foods equal to or under price  |
+| GET  |/search/type/\<int:type\>   | Search for certain types of restaurants: 0 - vegan, 1 - vegetarian, 2 - vegan options  | Returns list of restaurant according to type   |
+|   |   |   |   |
 ### R6. An ERD for your app
 
 ![ERD](./docs/VeganFoodReviewAPI_FINAL.drawio.png)
