@@ -1,7 +1,7 @@
 # Vegan Foodie API
 ### by Carmina Familar
 
-
+GitHub link: https://github.com/CarminaF/VeganFoodReviewAPI
 ### Purpose
 The "Vegan Foodie" project is an API designed to connect to a database containing vegan food options at available at various restaurants and establishments. Users are able to search for food options offered at restaurants. Each restaurant will fall under one of the following types: "Vegan", "Vegetarian" and "Vegan Options Available". While most food review apps such as Google Maps and HappyCow focus on the establishment's rating, the Vegan Foodie focuses on individual food items where users are able to rate, read and write reviews about the food items available at each establishment, not on the establishment itself.
 
