@@ -18,6 +18,7 @@ foods_bp.register_blueprint(reviews_bp, url_prefix='/<int:food_id>/reviews')
 @jwt_required()
 def create_food(restaurant_id):
     body_data = request.get_json()
+    # Select restaurant with restaurant_id
     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
     restaurant = db.session.scalar(stmt)
     if restaurant:
@@ -38,6 +39,7 @@ def create_food(restaurant_id):
 @jwt_required()
 @admin_required
 def delete_food(food_id):
+    # Select food with id
     stmt = db.select(Food).filter_by(id=food_id)
     food = db.session.scalar(stmt)
     if food:
@@ -51,6 +53,7 @@ def delete_food(food_id):
 @foods_bp.route('/')
 @jwt_required()
 def get_all_foods():
+    # Select foods in ascending order
     stmt = db.select(Food).order_by(Food.name.asc())
     foods = db.session.scalars(stmt)
     return foods_schema.dumps(foods)
@@ -59,6 +62,7 @@ def get_all_foods():
 @foods_bp.route('/<int:food_id>')
 @jwt_required()
 def get_one_food(food_id):
+    # Select one food with matching food_id
     stmt = db.select(Food).filter_by(id=food_id)
     food = db.session.scalar(stmt)
     return food_schema.dumps(food)
@@ -69,6 +73,7 @@ def get_one_food(food_id):
 @admin_required
 def update_food(id):
     body_data = food_schema.load(request.get_json(), partial=True)
+    # Select one food with matching food_id 
     stmt = db.select(Food).filter_by(id=id)
     food = db.session.scalar(stmt)
     if food:

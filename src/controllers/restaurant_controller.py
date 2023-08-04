@@ -10,6 +10,7 @@ restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 
 @restaurants_bp.route('/')
 def get_all_restaurants():
+    # Select all restaurants in ascending order
     stmt = db.select(Restaurant).order_by(Restaurant.name.asc())
     restaurants = db.session.scalars(stmt)
     return restaurants_schema.dump(restaurants)
@@ -17,6 +18,7 @@ def get_all_restaurants():
 
 @restaurants_bp.route('/<int:id>')
 def get_one_restaurant(id):
+    # Select Restaurant with matching id 
     stmt = db.select(Restaurant).filter_by(id=id)
     restaurant = db.session.scalar(stmt)
     if restaurant:
@@ -48,6 +50,7 @@ def create_restaurant():
 @jwt_required()
 @admin_required
 def delete_restaurant(restaurant_id):
+     # Select Restaurant with matching id
     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
     restaurant = db.session.scalar(stmt)
     if restaurant:
@@ -63,6 +66,7 @@ def delete_restaurant(restaurant_id):
 @admin_required
 def update_restaurant(restaurant_id):
     body_data = restaurant_schema.load(request.get_json(), partial=True)
+     # Select Restaurant with matching id
     stmt = db.select(Restaurant).filter_by(id=restaurant_id)
     restaurant = db.session.scalar(stmt)
     if restaurant:

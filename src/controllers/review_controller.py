@@ -14,6 +14,7 @@ reviews_bp = Blueprint('reviews', __name__)
 @reviews_bp.route('/')
 @jwt_required()
 def get_reviews(food_id):
+     # Select Review with matching id
     stmt = db.select(Review).filter_by(food_id=food_id)
     reviews = db.session.scalars(stmt)
     if reviews:
@@ -28,6 +29,7 @@ def get_reviews(food_id):
 @jwt_required()
 def create_review(food_id):
     body_data = request.get_json()
+    # Select Food with matching id
     stmt = db.select(Food).filter_by(id=food_id)
     food = db.session.scalar(stmt)
     if food:
@@ -52,6 +54,7 @@ def create_review(food_id):
 @jwt_required()
 def delete_review(food_id, review_id):
     user_id = get_jwt_identity()
+    # Select Review with matching id
     stmt = db.select(Review).filter_by(id=review_id)
     review = db.session.scalar(stmt)
     if review and int(review.user_id) == int(user_id):
@@ -70,6 +73,7 @@ def delete_review(food_id, review_id):
 def update_review(food_id, review_id):
     user_id = get_jwt_identity()
     body_data = review_schema.load(request.get_json(), partial=True)
+    # Select Review with matching id
     stmt = db.select(Review).filter_by(id=review_id)
     review = db.session.scalar(stmt)
     if int(review.user_id) != int(user_id):

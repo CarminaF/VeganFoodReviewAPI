@@ -62,6 +62,7 @@ def auth_login():
     body_data = request.get_json()
     email_or_username = body_data.get('email_or_username')
 
+    # Select entry from user table where the 'email or username' field matches the 'email' or 'username' field
     stmt = db.select(User).where(db.or_(User.email == email_or_username, User.username == email_or_username))
     user = db.session.scalar(stmt)
 
