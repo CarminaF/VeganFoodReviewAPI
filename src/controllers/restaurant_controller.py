@@ -12,7 +12,6 @@ restaurants_bp = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 def get_all_restaurants():
     stmt = db.select(Restaurant).order_by(Restaurant.name.asc())
     restaurants = db.session.scalars(stmt)
-    print(restaurants)
     return restaurants_schema.dump(restaurants)
 
 

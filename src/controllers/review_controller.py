@@ -16,7 +16,10 @@ reviews_bp = Blueprint('reviews', __name__)
 def get_reviews(food_id):
     stmt = db.select(Review).filter_by(food_id=food_id)
     reviews = db.session.scalars(stmt)
-    return reviews_schema.dump(reviews)
+    if reviews:
+        return reviews_schema.dump(reviews)
+    else:
+        return {'error': f'Food with id {id} not found'}
 
 
 # Create a review for a food
@@ -79,7 +82,7 @@ def update_review(food_id, review_id):
         db.session.commit()
         return review_schema.dump(review)
     else:
-        return {'error': f'Card with id {id} not found'}, 404
+        return {'error': f'Review with id {id} not found'}, 404
     
 
 

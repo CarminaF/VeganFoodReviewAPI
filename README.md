@@ -37,15 +37,58 @@ This application utilises the relational database manager PostgreSQL. It is a fr
 
 ### R4. Identify and discuss the key functionalities and benefits of an ORM
 
-An ORM or Object Relational Mapping is the simplified connection between object-oriented programs and relational databases. For python, the most popular ORM's are Django, web2py, SQLObject and SQLAlchemy. The advantage is that development time and cost are reduced. The logic for interacting with the database are handles by the ORM. Security is also improved by as ORMs prevent SQL Injection. The drawback however is that it is time-consuming to learn and that ORMs are typically slower than SQL.
+An ORM or Object Relational Mapping is the simplified connection between object-oriented programs and relational databases. For python, the most popular ORM's are Django, web2py, SQLObject and SQLAlchemy. The advantage is that development time and cost are reduced. The logic for interacting with the database are handles by the ORM. Security is also improved by as ORMs prevent SQL Injection. The drawback however is that it is time-consuming to learn and that ORMs  typically run slower than SQL.
 
 ### R5. Document all endpoints for your API
 
+#### User
 
+| HTTP Request  | Route          | Description  | Expected Result  |   |
+|---|---|---|---|---|
+| POST| /auth/register   | Register as a new user | Dump login details except password on success, error messages if username and email taken or no input on non-nullable field  |
+| POST| /auth/login   | Log in    | Dump user token, login successful message and login except password. On error, 'incorrect login details' message.
+|   |   |   |   |   |
 
+####  Food
+| HTTP Request | Route                  | Description  | Expected Result  |   |
+|---|---|---|---|---|
+| POST  | /foods/\<int:restaurant_id\>  | Create food under one restaurant  | Dump new restaurant details on success, 404 error when id number not found  |   |
+| DELETE  | /foods/\<int:food_id\>  | Delete food (ADMIN ONLY)  | Deleted successfully message on success, 404 error when id not found and unauthorized if not an admin  |   |
+|GET   | /foods  | Get all foods  | Dumps all foods in database including reviews |   |
+|GET   | /foods/\<int:id\>  | Get one food  | Dumps detail of a single food including its reviews  |   |
+|PUT/PATCH   |  /foods/\<int:id\>  | Update food (ADMIN ONLY)  | Dumps updated food deatils on success, 404 error when id not found  |   |
+|   |   |   |   |   |
+
+#### Restaurant
+| HTTP Request | Route                  | Description  | Expected Result  |   |
+|---|---|---|---|---|
+| GET  |/restaurants   | Get all restaurants  | Dumps all existing resaturants  |   |
+|  GET |/restaurants/\<int:id\>   | Get on restaurant    |Dumps all details of one restaurant, 404 error if id not found   |   |
+| POST  |/restaurants   | Create restaurant (ADMIN ONLY)   | Dumps details of new restaurant  |   |
+| DELETE  |/foods/\<int:id\>  | Delete one restaurant (ADMIN ONLY)  | Deleted successfully message, 404 error when id not found  |   |
+| PUT, PATCH  | /restaurants/\<int:restaurant_id\>  | Update restaurant details (ADMIN ONLY)  |   |   |
+|   |   |   |   |   |
+
+#### Review
+| HTTP Request | Route                  | Description  | Expected Result  |   |
+|---|---|---|---|---|
+| GET  | /foods/\<int:food_id\>/reviews  | Get all reviews under a certain food  | Dumps all reviews under a food on success, 404 error when food_id not found  |   |
+| POST  | /foods/\<int:food_id\>/reviews  | Create review  | Dumps created review on success, 404 error when food id not found  |   |
+|DELETE   | /foods/\<int:food_id\>/reviews/\<int:review_id\>  | Delete user's own review   | Message that review successfully deleted, 401  if review is not user's own, 404 if review id not found  |   |
+|PUT, PATCH   | /foods/\<int:food_id\>/reviews/\<int:review_id\>   | Edit user’s own review  | Dumps updated review, 404 when review id not found  |   |
+|   |   |   |   |   |
+
+#### Search
+| HTTP Request | Route                  | Description  | Expected Result  |   |
+|---|---|---|---|---|
+| GET  |/search/food/\<string:keyword\>   |Search a keyword in the food name and description   | Dumps list of food containing keyword in the name and description  |   |
+| GET  |/search/location/\<string:keyword\>    |Search a location in the location field   |Dumps list of restaurants containing keyword in location field   |   |
+| GET   | /search/price/max/\<int:price\>  | Search for food items with a max price  | Returns list of foods equal to or under price  |   |
+| GET  |/search/type/\<int:type\>   | Search for certain types of restaurants: 0 - vegan, 1 - vegetarian, 2 - vegan options  | Returns list of restaurant according to type   |   |
+|   |   |   |   |   |
 ### R6. An ERD for your app
 
-![ERD](./docs/VeganFoodReviewAPI.png)
+![ERD](./docs/VeganFoodReviewAPI_FINAL.drawio.png)
 
 ### R7. Detail any third party services that your app will use
 
@@ -56,15 +99,29 @@ An ORM or Object Relational Mapping is the simplified connection between object-
 - **Psycopg2** - Psycopg2 is a Python adapter for PostgreSQL databases. It establishes the connection between the python application and the PostgreSQL database.
 - **Bcrypt** - Bcrypt is utilised to encrypt the passwords and store it into the database. Upon login, it also checks whether the encrypted password typed upon login matches with the encrypted password in the database. 
 ### R8. Describe your projects models in terms of the relationships they have with each other
-There are four models used in this application: user, restaurant, food, and review. The user has a one to many relationship with the review. The food also has a one to many relationship with review. Finally, the f
+There are four models used in this application: 
+- **User** - Each user has an id which is the primary key, unique username, email, password and an is_admin boolean which defaults to false. Users can leave multiple reviews and thus the user table has a one-to-many relationship with the Reviews model.
+- **Restaurant** - Each restaurant has the following fields: id which is the primary key, name, location, contact_number, website, type (either "vegan", "vegetarian" or "vegan options available") and foods offered at that restaurant. The restaurant model has a one-to-many relationship with the food model as there can be multiple dishes served at each restaurant.
+- **Food** - The food model has an id which is the primary key, name, description, price, restaurant_id which is a foreign key to the restaurant table. The food model also has a one-to-many relationship with the reviews table.
+- **Review** - The review has an id which is the primary key, rating out of 5 stars, review_title, review_text, timestamp and a food_id from the foods table and user_id from the users table.
 
 ### R9. Discuss the database relations to be implemented in your application
+
+This application has multiple one-to-many relationships.
+1. **User to Reviews** - The users table has an id which is the primary key that is referenced as a foreign key 'user_id' in the reviews table. This represents a one-to-many relationship between users and their reviews.
+2. **Restaurant to Food** - The restaurants table has an id as the primary key which is referenced as a foreign key 'restaurant_id' in the food table. This represents a one-to-many relationship between restaurants and food.
+3. **Food to reviews** - The foods table has a primary key id and is referenced as a foreign key 'food_id' in the reviews table. This represents a one-to-many relationship between foods and its reviews.
 
 ### R10. Describe the way tasks are allocated and tracked in your project
 
 The project management tool used for this application was Trello. The link for the trello board is here: https://trello.com/invite/b/oxCO9kwF/ATTIaf232710e91f525c8453ea65e6202b87A517F357/vegan-food-review-api
 
+Individual tasks were created for making each model and schema. One task was also allocated for creating the ERD and one for creating the README.
 
+Tasks are first added onto the "To do" list then moved to "Doing" when a task was in progress. Finally they are moved to the "Done" column when each task has been completed.
+
+Below is a screenshot of the board:
+![Trello](./docs/Trello.png)
 
 
 
