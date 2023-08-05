@@ -37,7 +37,7 @@ This application utilises the relational database manager PostgreSQL. It is a fr
 
 ### R4. Identify and discuss the key functionalities and benefits of an ORM
 
-An ORM or Object Relational Mapping is the simplified connection between object-oriented programs and relational databases. For python, the most popular ORM's are Django, web2py, SQLObject and SQLAlchemy. The advantage is that development time and cost are reduced. The logic for interacting with the database are handles by the ORM. Security is also improved by as ORMs prevent SQL Injection. The drawback however is that it is time-consuming to learn and that ORMs  typically run slower than SQL.
+An ORM or Object Relational Mapping is the simplified connection between object-oriented programs and relational databases. For python, the most popular ORM's are Django, web2py, SQLObject and SQLAlchemy. The advantage is that development time and cost are reduced. The logic for interacting with the database are handled by the ORM. Security is also improved by as ORMs prevent SQL Injection. ORM's are ideal to use with APIs so if data source changes, the developer only need to change the ORM, not te applications that utilize the API. ORMs also offer database abstraction which makes migrating from one database manager to another much smoother. The drawback however is that it is time-consuming to learn and that ORMs typically run slower than SQL. Instead of ORMs, SQL stored procedures would be used.
 
 ### R5. Document all endpoints for your API
 
@@ -66,7 +66,7 @@ An ORM or Object Relational Mapping is the simplified connection between object-
 |  GET |/restaurants/\<int:id\>   | Get on restaurant    |Dumps all details of one restaurant, 404 error if id not found   |
 | POST  |/restaurants   | Create restaurant (ADMIN ONLY)   | Dumps details of new restaurant  |
 | DELETE  |/foods/\<int:id\>  | Delete one restaurant (ADMIN ONLY)  | Deleted successfully message, 404 error when id not found  |
-| PUT, PATCH  | /restaurants/\<int:restaurant_id\>  | Update restaurant details (ADMIN ONLY)  |   |
+| PUT, PATCH  | /restaurants/\<int:restaurant_id\>  | Update restaurant details (ADMIN ONLY)  | Returns updated restaurant details, 404 error when restaurant id not found   |
 |   |   |   |   |
 
 #### Review
@@ -134,4 +134,5 @@ Below is a screenshot of the board:
 
 ### References
 - https://www.freecodecamp.org/news/what-is-an-orm-the-meaning-of-object-relational-mapping-database-tools/
+- https://www.theserverside.com/definition/object-relational-mapping-ORM
 - https://www.prisma.io/dataguide/postgresql/benefits-of-postgresql
